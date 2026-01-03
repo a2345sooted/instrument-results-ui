@@ -1,0 +1,58 @@
+.toolbar {
+  background-color: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+}
+
+/* App title */
+.app-name {
+  font-weight: 600;
+  margin-right: 16px;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Desktop nav */
+.nav {
+  display: flex;
+  gap: 4px;
+}
+
+.nav a {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.nav a:hover {
+  color: #ffffff;
+}
+
+.nav-icon {
+  margin-right: 6px;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Push user menu to the right */
+.spacer {
+  flex: 1 1 auto;
+}
+
+/* Hamburger */
+.hamburger {
+  display: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav {
+    display: none;
+  }
+
+  .hamburger {
+    display: inline-flex;
+  }
+}
+
+/* Active route */
+a.active {
+  background: rgba(255, 255, 255, 0.16);
+}

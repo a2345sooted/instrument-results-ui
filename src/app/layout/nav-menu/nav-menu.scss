@@ -1,0 +1,19 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+}
+
+.menu-content {
+  min-width: 220px;
+  padding: 6px 8px;
+  opacity: 0.85;
+}
+
+button[mat-icon-button] {
+  color: var(--mat-sys-on-primary);
+}
+
+a.active {
+  font-weight: 600;
+  background: rgba(0, 0, 0, 0.06);
+}

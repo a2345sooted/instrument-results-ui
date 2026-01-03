@@ -1,0 +1,19 @@
+<button
+  mat-icon-button
+  type="button"
+  aria-label="User menu"
+  [matMenuTriggerFor]="menu"
+>
+  <mat-icon>account_circle</mat-icon>
+</button>
+
+<mat-menu
+  #menu="matMenu"
+  xPosition="before"
+  yPosition="below"
+>
+  <div class="menu-content" mat-menu-item disabled>
+    <div class="label">Client ID:</div>
+    <div class="value">{{ clientId }}</div>
+  </div>
+</mat-menu>

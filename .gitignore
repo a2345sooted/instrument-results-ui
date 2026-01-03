@@ -41,3 +41,19 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Angular build artifacts
+/angular.log
+
+# Environment files
+/src/environments/*.local.ts
+/src/environments/*secret*.ts
+.env
+.env.*
+
+# macOS
+.AppleDouble
+.LSOverride
+
+# Logs
+*.log

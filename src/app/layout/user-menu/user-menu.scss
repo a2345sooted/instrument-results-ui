@@ -1,0 +1,29 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+}
+
+.menu-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 8px;
+  min-width: 280px;
+}
+
+.label {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.value {
+  font-size: 13px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+  "Liberation Mono", "Courier New", monospace;
+  word-break: break-all;
+}
+
+button[mat-icon-button] {
+  color: var(--mat-sys-on-primary);
+}
+
