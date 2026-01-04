@@ -8,5 +8,20 @@
     <div class="waiting-message">
       <div class="message">Waiting for measurements...</div>
     </div>
+  } @else if (run.status === 'MEASUREMENTS_SUBMITTED') {
+    <div class="waiting-message">
+      <div class="message">Waiting to start processing...</div>
+    </div>
+  } @else if (run.status === 'PROCESSING') {
+    <div class="waiting-message">
+      <div class="message">Processing measurements...</div>
+    </div>
+  }
+
+  @if (run.processResult) {
+    <div class="result-section">
+      <div class="result-label">Process Result</div>
+      <pre class="result-content">{{ run.processResult.result }}</pre>
+    </div>
   }
 </div>

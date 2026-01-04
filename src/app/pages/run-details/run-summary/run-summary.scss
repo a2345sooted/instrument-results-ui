@@ -41,3 +41,32 @@
   color: rgba(0, 0, 0, 0.6);
   font-style: italic;
 }
+
+.result-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.result-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.result-content {
+  margin: 0;
+  padding: 12px;
+  background-color: rgba(0, 0, 0, 0.04);
+  border-radius: 8px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.87);
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}

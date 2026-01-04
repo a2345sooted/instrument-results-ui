@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {CommonModule} from '@angular/common';
 
@@ -29,7 +29,7 @@ import {SubmitMeasurementsPayload} from './measurements-form/measurements-form';
   templateUrl: './run-details.html',
   styleUrls: ['./run-details.scss'],
 })
-export class RunDetails implements OnInit {
+export class RunDetails implements OnInit, OnDestroy {
   runId!: number;
 
   isLoadingRun = false;
@@ -38,6 +38,8 @@ export class RunDetails implements OnInit {
   run: InstrumentRunResponse | null = null;
 
   isSubmittingMeasurements = false;
+
+  private pollingIntervalId: ReturnType<typeof setInterval> | null = null;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -96,6 +98,49 @@ export class RunDetails implements OnInit {
     return Number.isFinite(id) && Number.isInteger(id) && id > 0;
   }
 
+  ngOnDestroy(): void {
+    this.stopPolling();
+  }
+
+  private startPolling(): void {
+    // Clear any existing polling
+    this.stopPolling();
+
+    // Poll every 2 seconds
+    this.pollingIntervalId = setInterval(() => {
+      // Stop polling if we reach a terminal state
+      if (this.run?.status === 'SUCCEEDED' || this.run?.status === 'FAILED') {
+        this.stopPolling();
+        return;
+      }
+
+      // Silently refresh the run (no loading spinner)
+      this.runsApi.getInstrumentRunById(this.runId)
+        .subscribe({
+          next: (run) => {
+            this.run = run;
+            this.cdr.markForCheck();
+
+            // Stop polling if we've reached a terminal state
+            if (run.status === 'SUCCEEDED' || run.status === 'FAILED') {
+              this.stopPolling();
+            }
+          },
+          error: (err) => {
+            console.error('Polling error:', err);
+            // Continue polling even on error
+          }
+        });
+    }, 500);
+  }
+
+  private stopPolling(): void {
+    if (this.pollingIntervalId) {
+      clearInterval(this.pollingIntervalId);
+      this.pollingIntervalId = null;
+    }
+  }
+
   onSubmitMeasurements(payload: SubmitMeasurementsPayload): void {
     this.isSubmittingMeasurements = true;
     this.cdr.markForCheck();
@@ -112,6 +157,9 @@ export class RunDetails implements OnInit {
           // Success - use the updated run from the response
           this.run = updatedRun;
           this.cdr.markForCheck();
+
+          // Start polling for processing updates
+          this.startPolling();
         },
         error: (err) => {
           console.error('Failed to submit measurements:', err);

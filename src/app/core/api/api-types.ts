@@ -15,13 +15,13 @@ export interface CreateInstrumentRunRequest {
 }
 
 export type InstrumentRunStatus =
-  | 'CREATED'
-  | 'MEASUREMENTS_SUBMITTED'
-  | 'PROCESSING_STARTED'
-  | 'PROCESSING_COMPLETED'
-  | 'ERROR'
-  // forward-compat if backend adds new statuses
-  | (string & {});
+    | 'CREATED'
+    | 'MEASUREMENTS_SUBMITTED'
+    | 'PROCESSING'
+    | 'SUCCEEDED'
+    | 'FAILED'
+    // forward-compat if backend adds new statuses
+    | (string & {});
 
 export interface RequiredMeasurementResponse {
   code: string;
@@ -38,6 +38,10 @@ export interface RequiredMeasurementResponse {
    * end-to-end to avoid JS float rounding.
    */
   submittedValue?: number | null;
+}
+
+export interface ProcessResult {
+  result: string;
 }
 
 export interface InstrumentRunResponse {
@@ -60,7 +64,7 @@ export interface InstrumentRunResponse {
   errorCode: string | null;
   errorMessage: string | null;
 
-  processResult: unknown | null;
+  processResult: ProcessResult | null;
 
   createdAt: string;
   updatedAt: string;
