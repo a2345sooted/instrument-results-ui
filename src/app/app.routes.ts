@@ -11,7 +11,7 @@ export const routes: Routes = [
 
   { path: 'runs', component: ViewRuns },
   { path: 'runs/create', component: CreateRun },
-  { path: 'runs/:runId', component: RunDetails },
+  { path: 'runs/:id', component: RunDetails },
 
   { path: '**', redirectTo: 'runs' },
 ];

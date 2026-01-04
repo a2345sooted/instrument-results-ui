@@ -11,11 +11,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+
+import { Router } from '@angular/router';
 
 import { delay, finalize, materialize, dematerialize } from 'rxjs/operators';
 
 import { UuidService } from '../../core/uuid/uuid.service';
-import { RunsApi, Instrument } from '../../core/api/runs.api';
+import {Instrument, InstrumentRunResponse} from '../../core/api/api-types';
+import {RunsApi} from '../../core/api/runs.api';
 
 @Component({
   selector: 'app-create-run',
@@ -26,6 +30,7 @@ import { RunsApi, Instrument } from '../../core/api/runs.api';
     MatInputModule,
     MatSelectModule,
     MatProgressSpinnerModule,
+    MatSnackBarModule,
   ],
   templateUrl: './create-run.html',
   styleUrl: './create-run.scss',
@@ -40,13 +45,21 @@ export class CreateRun implements OnInit {
 
   instruments: Instrument[] = [];
 
+  // instrument list loading states
   isLoadingInstruments = false;
   instrumentsLoadError: string | null = null;
+
+  // create run submission states
+  isCreatingRun = false;
+  createRunError: string | null = null;
+  createdRun: InstrumentRunResponse | null = null;
 
   constructor(
     private readonly uuidService: UuidService,
     private readonly runsApi: RunsApi,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private readonly snackBar: MatSnackBar,
+    private readonly router: Router
   ) {}
 
   ngOnInit(): void {
@@ -54,8 +67,6 @@ export class CreateRun implements OnInit {
   }
 
   loadInstruments(): void {
-    console.log('[CreateRun] loadInstruments() start', new Date().toISOString());
-
     this.isLoadingInstruments = true;
     this.instrumentsLoadError = null;
     this.instruments = [];
@@ -64,20 +75,17 @@ export class CreateRun implements OnInit {
     this.runsApi
       .getInstruments()
       .pipe(
-        // ✅ THIS delays both success AND error by 1s
+        // delay both success+error by 1s (your current behavior)
         materialize(),
-        delay(1000),
+        delay(300),
         dematerialize(),
-
         finalize(() => {
           this.isLoadingInstruments = false;
-          console.log('[CreateRun] loadInstruments() finalize');
           this.cdr.markForCheck();
         })
       )
       .subscribe({
         next: (instruments) => {
-          console.log('[CreateRun] instruments next', instruments?.length);
           this.instruments = instruments ?? [];
           this.cdr.markForCheck();
         },
@@ -86,11 +94,12 @@ export class CreateRun implements OnInit {
           this.instrumentsLoadError = 'Failed to load instruments.';
           this.cdr.markForCheck();
         },
-        complete: () => console.log('[CreateRun] instruments complete'),
       });
   }
 
   generateFakeExternalRef(): void {
+    if (this.isCreatingRun) return;
+
     const uuid = this.uuidService.generateUUID();
 
     this.form.controls.externalReferenceId.setValue(uuid);
@@ -99,6 +108,69 @@ export class CreateRun implements OnInit {
   }
 
   createRun(): void {
-    // intentionally empty for now
+    if (this.isCreatingRun) return;
+
+    this.createRunError = null;
+    this.createdRun = null;
+
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    const instrumentId = this.form.controls.instrumentId.value;
+    const instrument = this.instruments.find((i) => i.id === instrumentId);
+
+    if (!instrument) {
+      this.createRunError = 'Please select a valid instrument.';
+      this.cdr.markForCheck();
+      return;
+    }
+
+    const externalRefRaw = this.form.controls.externalReferenceId.value ?? '';
+    const externalReference =
+      externalRefRaw.trim().length > 0 ? externalRefRaw.trim() : undefined;
+
+    this.isCreatingRun = true;
+    this.form.disable({ emitEvent: false });
+    this.cdr.markForCheck();
+
+    this.runsApi
+      .createInstrumentRun({
+        instrumentCode: instrument.code,
+        externalReference,
+      })
+      .pipe(
+        finalize(() => {
+          this.isCreatingRun = false;
+          this.form.enable({ emitEvent: false });
+          this.cdr.markForCheck();
+        })
+      )
+      .subscribe({
+        next: (created) => {
+          this.createdRun = created;
+
+          // ✅ green toast
+          this.snackBar.open(`Run #${created.id} created`, undefined, {
+            duration: 2000,
+            panelClass: ['snack-success'],
+          });
+
+          // ✅ wait 1s then navigate
+          setTimeout(() => {
+            this.router.navigateByUrl(`/runs/${created.id}`);
+          }, 1000);
+
+          this.cdr.markForCheck();
+        },
+        error: (err) => {
+          console.log('[CreateRun] createRun error', err);
+
+          // ✅ updated text
+          this.createRunError = 'Failed to create run. Please try again.';
+          this.cdr.markForCheck();
+        },
+      });
   }
 }

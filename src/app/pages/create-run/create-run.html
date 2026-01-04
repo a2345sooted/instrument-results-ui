@@ -47,6 +47,7 @@
             mat-button
             type="button"
             class="generate-btn"
+            [disabled]="isCreatingRun"
             (click)="generateFakeExternalRef()"
           >
             Generate a fake one
@@ -54,16 +55,29 @@
         </div>
       </div>
 
+      @if (createRunError) {
+        <div class="submit-error">
+          {{ createRunError }}
+        </div>
+      }
+
       <!-- Create button -->
       <div class="actions">
         <button
           mat-raised-button
           color="primary"
           type="button"
-          [disabled]="form.invalid"
+          [disabled]="form.invalid || isCreatingRun"
           (click)="createRun()"
         >
-          Create
+          @if (isCreatingRun) {
+            <span class="btn-spinner">
+              <mat-spinner diameter="18"></mat-spinner>
+            </span>
+            <span>Creating...</span>
+          } @else {
+            <span>Create</span>
+          }
         </button>
       </div>
     </form>

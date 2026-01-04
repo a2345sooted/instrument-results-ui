@@ -1,22 +1,57 @@
 :host {
   display: block;
-  height: 100%;
 }
 
 .page {
   padding: 24px 16px;
-}
-
-/* Center content and keep it readable on small screens */
-.page-inner {
   max-width: 1100px;
   margin: 0 auto;
 }
 
 h1 {
-  margin: 0 0 24px;
+  margin: 0 0 12px;
   font-size: 24px;
   font-weight: 600;
+}
+
+.state-row {
+  display: flex;
+  justify-content: center;
+  margin: 8px 0 16px;
+}
+
+.error-state {
+  width: 100%;
+  max-width: 760px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #fff5f5;
+  border: 1px solid #f3c2c2;
+}
+
+.error-text {
+  min-width: 0; // enables wrapping without forcing height
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.error-text .title {
+  font-weight: 600;
+  color: #b00020;
+  line-height: 1.2;
+}
+
+.error-text .message {
+  color: #5f2120;
+  font-size: 14px;
+  line-height: 1.35;
+  word-break: break-word;
 }
 
 .layout {
