@@ -67,3 +67,8 @@ export interface InstrumentRunResponse {
 
   requiredMeasurements: RequiredMeasurementResponse[];
 }
+
+
+export interface SubmitMeasurementsPayload {
+  measurements: { [key: string]: number };
+}

@@ -1,1 +1,12 @@
-<p>run-summary works!</p>
+<div class="summary">
+  <div class="field">
+    <div class="label">Status</div>
+    <div class="value status">{{ run.status }}</div>
+  </div>
+
+  @if (!run.measurementsSubmittedAt) {
+    <div class="waiting-message">
+      <div class="message">Waiting for measurements...</div>
+    </div>
+  }
+</div>

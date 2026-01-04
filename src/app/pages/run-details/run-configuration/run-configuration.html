@@ -16,5 +16,17 @@
     </div>
   </div>
 
-  <app-measurements-section [run]="run"></app-measurements-section>
+  <div class="section">
+    <h3 class="section-title">Measurements</h3>
+
+    @if (run.measurementsSubmittedAt) {
+      <app-measurements-display [run]="run"></app-measurements-display>
+    } @else {
+      <app-measurements-form
+        [run]="run"
+        [isSubmitting]="isSubmittingMeasurements"
+        (submitMeasurements)="onSubmitMeasurements($event)"
+      ></app-measurements-form>
+    }
+  </div>
 </div>

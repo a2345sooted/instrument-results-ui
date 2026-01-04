@@ -54,3 +54,19 @@
 .mono {
   font-family: 'Roboto Mono', monospace;
 }
+
+// Measurements section styles
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.section-title {
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.7);
+}

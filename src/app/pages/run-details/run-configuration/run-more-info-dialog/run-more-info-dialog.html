@@ -12,6 +12,13 @@
       <div class="value">{{ run.createdByClientId }}</div>
     </div>
 
+    @if (run.measurementsSubmittedByClientId) {
+      <div class="field">
+        <div class="label">Measurements Submitted By</div>
+        <div class="value">{{ run.measurementsSubmittedByClientId }}</div>
+      </div>
+    }
+
     <div class="field">
       <div class="label">Instrument Code</div>
       <div class="value mono">{{ run.instrumentCode }}</div>

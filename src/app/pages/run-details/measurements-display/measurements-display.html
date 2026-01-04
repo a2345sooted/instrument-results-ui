@@ -1,0 +1,22 @@
+<div class="measurements">
+  @for (measurement of run.requiredMeasurements; track measurement.code) {
+    <div class="measurement">
+      <div class="meta">
+        <div class="name">{{ measurement.name }}</div>
+        <div class="unit">{{ measurement.unit }}</div>
+      </div>
+
+      <div class="submitted-value">
+        {{ measurement.submittedValue ?? 'N/A' }}
+      </div>
+    </div>
+  }
+</div>
+
+<!-- Submitted metadata -->
+<div class="submitted-meta">
+  <div class="field">
+    <div class="label">Submitted On</div>
+    <div class="value">{{ formatSubmittedDate(run.measurementsSubmittedAt!) }}</div>
+  </div>
+</div>

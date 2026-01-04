@@ -1,5 +1,3 @@
-@use '../run_config_section' as *;
-
 .measurements {
   display: flex;
   flex-direction: column;
@@ -31,11 +29,6 @@
   font-size: 12px;
   font-weight: 500;
   color: rgba(0, 0, 0, 0.55);
-}
-
-/* Input sizing */
-.input {
-  width: 100%;
 }
 
 /* Submitted value styling */
@@ -76,10 +69,4 @@
   font-size: 14px;
   font-weight: 400;
   color: rgba(0, 0, 0, 0.87);
-}
-
-.actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 12px;
 }

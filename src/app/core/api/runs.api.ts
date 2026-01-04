@@ -4,62 +4,88 @@ import {Observable, throwError} from 'rxjs';
 import {catchError, timeout} from 'rxjs/operators';
 
 import {API_BASE_URL} from './api-base-url.token';
-import {CreateInstrumentRunRequest, Instrument, InstrumentRunResponse} from './api-types';
+import {CreateInstrumentRunRequest, Instrument, InstrumentRunResponse, SubmitMeasurementsPayload} from './api-types';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RunsApi {
   constructor(
-    private readonly http: HttpClient,
-    @Inject(API_BASE_URL) private readonly baseUrl: string
+      private readonly http: HttpClient,
+      @Inject(API_BASE_URL) private readonly baseUrl: string
   ) {}
 
   getInstruments(): Observable<Instrument[]> {
     return this.http
-      .get<Instrument[]>(`${this.baseUrl}/instruments`)
-      .pipe(
-        timeout(5000),
-        catchError((err) => throwError(() => err))
-      );
+        .get<Instrument[]>(`${this.baseUrl}/instruments`)
+        .pipe(
+            timeout(5000),
+            catchError((err) => throwError(() => err))
+        );
   }
 
   createInstrumentRun(
-    body: CreateInstrumentRunRequest
+      body: CreateInstrumentRunRequest
   ): Observable<InstrumentRunResponse> {
     return this.http
-      .post<InstrumentRunResponse>(`${this.baseUrl}/instrument-runs`, body)
-      .pipe(
-        timeout(8000),
-        catchError((err) => throwError(() => err))
-      );
+        .post<InstrumentRunResponse>(`${this.baseUrl}/instrument-runs`, body)
+        .pipe(
+            timeout(8000),
+            catchError((err) => throwError(() => err))
+        );
   }
 
   /**
    * GET /api/v1/instrument-runs/:id
    */
   getInstrumentRunById(
-    id: number | string
+      id: number | string
   ): Observable<InstrumentRunResponse> {
+    const encodedId = this.validateAndEncodeRunId(id);
 
+    return this.http
+        .get<InstrumentRunResponse>(
+            `${this.baseUrl}/instrument-runs/${encodedId}`
+        )
+        .pipe(
+            timeout(8000),
+            catchError((err) => throwError(() => err))
+        );
+  }
+
+  /**
+   * POST /api/v1/instrument-runs/:id/measurements
+   */
+  submitMeasurements(
+      id: number | string,
+      body: SubmitMeasurementsPayload
+  ): Observable<InstrumentRunResponse> {
+    const encodedId = this.validateAndEncodeRunId(id);
+
+    return this.http
+        .post<InstrumentRunResponse>(
+            `${this.baseUrl}/instrument-runs/${encodedId}/measurements`,
+            body
+        )
+        .pipe(
+            timeout(8000),
+            catchError((err) => throwError(() => err))
+        );
+  }
+
+  /**
+   * Validates and encodes an instrument run ID for use in API URLs
+   */
+  private validateAndEncodeRunId(id: number | string): string {
     const parsedId =
-      typeof id === 'string'
-        ? Number(id)
-        : id;
+        typeof id === 'string'
+            ? Number(id)
+            : id;
 
     if (!Number.isInteger(parsedId) || parsedId <= 0) {
       throw new Error(`Invalid instrument run id: ${id}`);
     }
 
-    const encodedId = encodeURIComponent(String(parsedId));
-
-    return this.http
-      .get<InstrumentRunResponse>(
-        `${this.baseUrl}/instrument-runs/${encodedId}`
-      )
-      .pipe(
-        timeout(8000),
-        catchError((err) => throwError(() => err))
-      );
+    return encodeURIComponent(String(parsedId));
   }
 }

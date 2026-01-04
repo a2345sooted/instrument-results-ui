@@ -7,11 +7,13 @@ import {RunsApi} from '../../core/api/runs.api';
 
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatButtonModule} from '@angular/material/button';
+import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 
 import {delay, dematerialize, finalize, materialize, take} from 'rxjs/operators';
 
 import {RunConfiguration} from './run-configuration/run-configuration';
 import {RunSummary} from './run-summary/run-summary';
+import {SubmitMeasurementsPayload} from './measurements-form/measurements-form';
 
 @Component({
   selector: 'app-run-details',
@@ -20,6 +22,7 @@ import {RunSummary} from './run-summary/run-summary';
     CommonModule,
     MatProgressSpinnerModule,
     MatButtonModule,
+    MatSnackBarModule,
     RunConfiguration,
     RunSummary,
   ],
@@ -34,10 +37,13 @@ export class RunDetails implements OnInit {
 
   run: InstrumentRunResponse | null = null;
 
+  isSubmittingMeasurements = false;
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly runsApi: RunsApi,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private readonly snackBar: MatSnackBar
   ) {
   }
 
@@ -45,7 +51,7 @@ export class RunDetails implements OnInit {
     const rawId = this.route.snapshot.paramMap.get('id');
     this.runId = Number(rawId);
 
-    // Don’t auto-load if invalid; show error state
+    // Don't auto-load if invalid; show error state
     if (!rawId || !this.isValidRunId(this.runId)) {
       this.runLoadError = rawId
         ? `Invalid run id: ${rawId}`
@@ -88,5 +94,36 @@ export class RunDetails implements OnInit {
 
   private isValidRunId(id: number): boolean {
     return Number.isFinite(id) && Number.isInteger(id) && id > 0;
+  }
+
+  onSubmitMeasurements(payload: SubmitMeasurementsPayload): void {
+    this.isSubmittingMeasurements = true;
+    this.cdr.markForCheck();
+
+    this.runsApi.submitMeasurements(this.runId, payload)
+      .pipe(
+        finalize(() => {
+          this.isSubmittingMeasurements = false;
+          this.cdr.markForCheck();
+        })
+      )
+      .subscribe({
+        next: (updatedRun) => {
+          // Success - use the updated run from the response
+          this.run = updatedRun;
+          this.cdr.markForCheck();
+        },
+        error: (err) => {
+          console.error('Failed to submit measurements:', err);
+
+          // Show error toast
+          this.snackBar.open('Failed to submit measurements. Please try again.', 'Dismiss', {
+            duration: 5000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            panelClass: ['error-snackbar']
+          });
+        }
+      });
   }
 }
