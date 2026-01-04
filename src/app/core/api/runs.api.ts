@@ -4,7 +4,13 @@ import {Observable, throwError} from 'rxjs';
 import {catchError, timeout} from 'rxjs/operators';
 
 import {API_BASE_URL} from './api-base-url.token';
-import {CreateInstrumentRunRequest, Instrument, InstrumentRunResponse, SubmitMeasurementsPayload} from './api-types';
+import {
+  CreateInstrumentRunRequest,
+  Instrument,
+  InstrumentRunListItem,
+  InstrumentRunResponse,
+  SubmitMeasurementsPayload
+} from './api-types';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +26,18 @@ export class RunsApi {
         .get<Instrument[]>(`${this.baseUrl}/instruments`)
         .pipe(
             timeout(5000),
+            catchError((err) => throwError(() => err))
+        );
+  }
+
+  /**
+   * GET /api/v1/instrument-runs
+   */
+  getAllRuns(): Observable<InstrumentRunListItem[]> {
+    return this.http
+        .get<InstrumentRunListItem[]>(`${this.baseUrl}/instrument-runs`)
+        .pipe(
+            timeout(8000),
             catchError((err) => throwError(() => err))
         );
   }

@@ -21,8 +21,17 @@ h1 {
   font-weight: 600;
 }
 
-.filter {
-  width: 280px;
+.loading-state,
+.error-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.error-state {
+  color: #b00020;
 }
 
 .table-wrap {
@@ -37,16 +46,10 @@ h1 {
   -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
 }
 
-/* Ensure table can exceed viewport width */
+/* Ensure table can scroll horizontally on small screens */
 .runs-table {
-  width: max-content;
-  min-width: 100%;
-  table-layout: fixed;
-}
-
-.runs-table {
+  min-width: 600px; /* Minimum width to trigger horizontal scroll */
   width: 100%;
-  table-layout: fixed;
 }
 
 /* Zebra striping */
@@ -58,21 +61,25 @@ tr.mat-mdc-row:hover {
   background: rgba(0, 0, 0, 0.06);
 }
 
-/* Practical column sizing (Material table doesn't include drag-to-resize by default) */
-.mat-column-runId {
-  width: 120px;
+/* Practical column sizing */
+.mat-column-id {
+  width: 80px;
 }
 
 .mat-column-status {
-  width: 130px;
+  width: 150px;
 }
 
-.mat-column-createdAt,
-.mat-column-updatedAt {
-  width: 170px;
+.mat-column-createdAt {
+  width: 200px;
 }
 
-.mat-column-clientId,
-.mat-column-externalRefId {
-  width: 320px;
+.mat-column-externalReference {
+  flex: 1;
+  min-width: 200px;
+}
+
+.mat-column-actions {
+  width: 120px;
+  text-align: center;
 }

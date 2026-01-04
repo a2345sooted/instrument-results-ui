@@ -14,6 +14,13 @@ export interface CreateInstrumentRunRequest {
   externalReference?: string;
 }
 
+export interface InstrumentRunListItem {
+  id: number;
+  externalReference: string | null;
+  status: InstrumentRunStatus;
+  createdAt: string;
+}
+
 export type InstrumentRunStatus =
     | 'CREATED'
     | 'MEASUREMENTS_SUBMITTED'
