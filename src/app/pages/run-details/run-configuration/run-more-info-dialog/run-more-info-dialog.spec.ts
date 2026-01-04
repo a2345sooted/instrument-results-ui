@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InstrumentSection } from './instrument-section';
+import { RunMoreInfoDialog } from './run-more-info-dialog';
 
-describe('InstrumentSection', () => {
-  let component: InstrumentSection;
-  let fixture: ComponentFixture<InstrumentSection>;
+describe('RunMoreInfoDialog', () => {
+  let component: RunMoreInfoDialog;
+  let fixture: ComponentFixture<RunMoreInfoDialog>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [InstrumentSection]
+      imports: [RunMoreInfoDialog]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(InstrumentSection);
+    fixture = TestBed.createComponent(RunMoreInfoDialog);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

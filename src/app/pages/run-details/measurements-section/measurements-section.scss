@@ -9,7 +9,7 @@
 /* Always side-by-side */
 .measurement {
   display: grid;
-  grid-template-columns: 1fr 180px;
+  grid-template-columns: 1fr 140px;
   align-items: center;
   gap: 12px;
 }
@@ -37,6 +37,47 @@
 .input {
   width: 100%;
 }
+
+/* Submitted value styling */
+.submitted-value {
+  width: 100%;
+  font-size: 18px;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.87);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Submitted metadata section */
+.submitted-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.submitted-meta .field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.submitted-meta .label {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.submitted-meta .value {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.87);
+}
+
 .actions {
   display: flex;
   justify-content: flex-end;

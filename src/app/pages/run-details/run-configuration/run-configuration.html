@@ -1,4 +1,20 @@
 <div class="config">
-  <app-instrument-section></app-instrument-section>
-  <app-measurements-section></app-measurements-section>
+  <div class="header">
+    <div class="main-info">
+      <h2>Run ID: <span class="mono">{{ run.id }}</span></h2>
+      <div class="field">
+        <div class="label">External Ref ID</div>
+        <div class="value">{{ run.externalReference ?? 'None' }}</div>
+      </div>
+      <div class="field">
+        <div class="label">Instrument Name</div>
+        <div class="value">{{ run.instrumentName }}</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button mat-button (click)="openMoreInfoDialog()">More Info</button>
+    </div>
+  </div>
+
+  <app-measurements-section [run]="run"></app-measurements-section>
 </div>

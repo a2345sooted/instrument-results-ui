@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>Run Details</h2>
+
+<mat-dialog-content>
+  <div class="details">
+    <div class="field">
+      <div class="label">Created At</div>
+      <div class="value">{{ formatCreatedDate(run.createdAt) }}</div>
+    </div>
+
+    <div class="field">
+      <div class="label">Created By</div>
+      <div class="value">{{ run.createdByClientId }}</div>
+    </div>
+
+    <div class="field">
+      <div class="label">Instrument Code</div>
+      <div class="value mono">{{ run.instrumentCode }}</div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

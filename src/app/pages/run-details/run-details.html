@@ -1,9 +1,4 @@
 <div class="page">
-  <h1>
-    Run:
-    <span class="mono">{{ runId }}</span>
-  </h1>
-
   @if (isLoadingRun) {
     <div class="state-row" role="status" aria-live="polite">
       <mat-spinner diameter="40"></mat-spinner>
@@ -21,7 +16,7 @@
     <div class="layout">
       <!-- Left column (1/3) -->
       <section class="panel">
-        <app-run-configuration></app-run-configuration>
+        <app-run-configuration [run]="run"></app-run-configuration>
       </section>
 
       <!-- Right column (2/3) -->

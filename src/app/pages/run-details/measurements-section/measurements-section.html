@@ -2,80 +2,57 @@
   <h3 class="section-title">Measurements</h3>
 
   <div class="measurements">
-    <!-- Stub row 1 -->
-    <div class="measurement">
-      <div class="meta">
-        <div class="name">Temperature</div>
-        <div class="unit">°C</div>
+    @for (measurement of run.requiredMeasurements; track measurement.code) {
+      <div class="measurement">
+        <div class="meta">
+          <div class="name">{{ measurement.name }}</div>
+          <div class="unit">{{ measurement.unit }}</div>
+        </div>
+
+        @if (run.measurementsSubmittedAt) {
+          <div class="submitted-value">
+            {{ measurement.submittedValue ?? 'N/A' }}
+          </div>
+        } @else {
+          <mat-form-field appearance="outline" class="input">
+            <mat-label>Value</mat-label>
+            <input
+              matInput
+              type="text"
+              inputmode="decimal"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="0.0000"
+              pattern="^-?\d*(\.\d*)?$"
+              (beforeinput)="onBeforeInput($event)"
+              (paste)="onPaste($event)"
+            />
+          </mat-form-field>
+        }
       </div>
-
-      <mat-form-field appearance="outline" class="input">
-        <mat-label>Value</mat-label>
-        <input
-          matInput
-          type="text"
-          inputmode="decimal"
-          autocomplete="off"
-          spellcheck="false"
-          placeholder="0.0000"
-          pattern="^-?\d*(\.\d*)?$"
-          (beforeinput)="onBeforeInput($event)"
-          (paste)="onPaste($event)"
-        />
-      </mat-form-field>
-    </div>
-
-    <!-- Stub row 2 -->
-    <div class="measurement">
-      <div class="meta">
-        <div class="name">Pressure</div>
-        <div class="unit">kPa</div>
-      </div>
-
-      <mat-form-field appearance="outline" class="input">
-        <mat-label>Value</mat-label>
-        <input
-          matInput
-          type="text"
-          inputmode="decimal"
-          autocomplete="off"
-          spellcheck="false"
-          placeholder="0.0000"
-          pattern="^-?\d*(\.\d*)?$"
-          (beforeinput)="onBeforeInput($event)"
-          (paste)="onPaste($event)"
-        />
-      </mat-form-field>
-    </div>
-
-    <!-- Stub row 3 -->
-    <div class="measurement">
-      <div class="meta">
-        <div class="name">Flow Rate</div>
-        <div class="unit">mL/min</div>
-      </div>
-
-      <mat-form-field appearance="outline" class="input">
-        <mat-label>Value</mat-label>
-        <input
-          matInput
-          type="text"
-          inputmode="decimal"
-          autocomplete="off"
-          spellcheck="false"
-          placeholder="0.0000"
-          pattern="^-?\d*(\.\d*)?$"
-          (beforeinput)="onBeforeInput($event)"
-          (paste)="onPaste($event)"
-        />
-      </mat-form-field>
-    </div>
+    }
   </div>
 
-  <!-- Submit button (does nothing for now) -->
-  <div class="actions">
-    <button mat-raised-button color="primary" type="button">
-      Submit Measurements
-    </button>
-  </div>
+  <!-- Submitted metadata - only show if measurements submitted -->
+  @if (run.measurementsSubmittedAt) {
+    <div class="submitted-meta">
+      <div class="field">
+        <div class="label">Submitted On</div>
+        <div class="value">{{ formatSubmittedDate(run.measurementsSubmittedAt) }}</div>
+      </div>
+      <div class="field">
+        <div class="label">Submitted By</div>
+        <div class="value">{{ run.measurementsSubmittedByClientId }}</div>
+      </div>
+    </div>
+  }
+
+  <!-- Submit button - only show if measurements not yet submitted -->
+  @if (!run.measurementsSubmittedAt) {
+    <div class="actions">
+      <button mat-raised-button color="primary" type="button">
+        Submit Measurements
+      </button>
+    </div>
+  }
 </div>
