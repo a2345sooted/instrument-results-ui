@@ -4,9 +4,75 @@
 }
 
 .page {
-  height: 100%;
-  display: grid;
-  place-items: center;
-  font-size: 22px;
+  padding: 24px 16px;
+}
+
+.title-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 24px;
   font-weight: 600;
+}
+
+.filter {
+  width: 280px;
+}
+
+.table-wrap {
+  border-radius: 12px;
+  overflow: hidden; /* keeps rounded corners */
+}
+
+/* Horizontal scrolling container */
+.table-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+}
+
+/* Ensure table can exceed viewport width */
+.runs-table {
+  width: max-content;
+  min-width: 100%;
+  table-layout: fixed;
+}
+
+.runs-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+/* Zebra striping */
+tr.mat-mdc-row:nth-child(even) {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+tr.mat-mdc-row:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* Practical column sizing (Material table doesn't include drag-to-resize by default) */
+.mat-column-runId {
+  width: 120px;
+}
+
+.mat-column-status {
+  width: 130px;
+}
+
+.mat-column-createdAt,
+.mat-column-updatedAt {
+  width: 170px;
+}
+
+.mat-column-clientId,
+.mat-column-externalRefId {
+  width: 320px;
 }

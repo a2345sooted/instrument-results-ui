@@ -1,0 +1,44 @@
+@use '../run_config_section' as *;
+
+.measurements {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Always side-by-side */
+.measurement {
+  display: grid;
+  grid-template-columns: 1fr 180px;
+  align-items: center;
+  gap: 12px;
+}
+
+/* name + unit */
+.meta {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.name {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.unit {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+/* Input sizing */
+.input {
+  width: 100%;
+}
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}

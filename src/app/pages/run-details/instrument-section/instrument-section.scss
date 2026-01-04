@@ -1,0 +1,30 @@
+@use '../run_config_section' as *;
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.value {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.mono {
+  font-family: monospace;
+}
+
+.more-info {
+  align-self: flex-end;
+  padding-left: 0;
+  padding-right: 0;
+  line-height: normal;
+}

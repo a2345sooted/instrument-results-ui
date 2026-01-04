@@ -1,1 +1,71 @@
-<div class="page">Create Run</div>
+<div class="page">
+  <h1>Create Run</h1>
+
+  @if (isLoadingInstruments) {
+    <div class="center-state">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  } @else if (instrumentsLoadError) {
+    <div class="error-state">
+      <div class="message">{{ instrumentsLoadError }}</div>
+      <button
+        mat-raised-button
+        color="warn"
+        type="button"
+        (click)="loadInstruments()"
+      >
+        Retry
+      </button>
+    </div>
+  } @else {
+    <form [formGroup]="form" class="form">
+      <!-- Instrument -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Instrument (required)</mat-label>
+        <mat-select formControlName="instrumentId">
+          @for (instrument of instruments; track instrument.id) {
+            <mat-option [value]="instrument.id">
+              {{ instrument.name }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <!-- External Reference ID -->
+      <div class="external-ref-group">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>External Reference ID (optional)</mat-label>
+          <input
+            matInput
+            formControlName="externalReferenceId"
+            placeholder="Optional"
+          />
+        </mat-form-field>
+
+        <div class="external-ref-actions">
+          <button
+            mat-button
+            type="button"
+            class="generate-btn"
+            (click)="generateFakeExternalRef()"
+          >
+            Generate a fake one
+          </button>
+        </div>
+      </div>
+
+      <!-- Create button -->
+      <div class="actions">
+        <button
+          mat-raised-button
+          color="primary"
+          type="button"
+          [disabled]="form.invalid"
+          (click)="createRun()"
+        >
+          Create
+        </button>
+      </div>
+    </form>
+  }
+</div>
