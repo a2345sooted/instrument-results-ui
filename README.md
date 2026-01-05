@@ -3,7 +3,6 @@
 This is the frontend for the Instrument Results application, built with Angular.
 
 It provides the user interface for:
-- Viewing available instruments
 - Creating instrument runs
 - Submitting measurements
 - Viewing run results
